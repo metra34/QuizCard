@@ -140,7 +140,7 @@ public class QuizCardBuilder {
 		JFileChooser fileSave = new JFileChooser();
 		fileSave.showSaveDialog(frame);
 		// save the cards to the desired file
-		saveFile(fileSave.getSelectedFile());	
+		saveFile(fileSave.getSelectedFile());
 	    }
 	}
 	
@@ -160,7 +160,7 @@ public class QuizCardBuilder {
 		BufferedWriter writer = new BufferedWriter (new FileWriter(file));
 		
 		for (QuizCard card : allCards){
-		    writer.write(card.getQuestion() + "/");
+		    writer.write(card.getQuestion() + "|/|");
 		    writer.write(card.getAnswer() + "\n");
 		}
 		writer.close();
@@ -169,5 +169,4 @@ public class QuizCardBuilder {
 		e.printStackTrace();
 	    }
 	}
-
 }
