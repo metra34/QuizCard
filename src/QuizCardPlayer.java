@@ -11,10 +11,12 @@ public class QuizCardPlayer extends QuizCardGui{
     private JTextArea qTextArea;
     private JTextArea aTextArea;
     private ArrayList<QuizCard> allCards;
+    private QuizCard currCard;
     // flag to determine state of cardPlayer
     private boolean isAnswerShown;
     
     public static void main(String[] args) {
+	QuizCardBuilder bc = new QuizCardBuilder();
 	QuizCardPlayer ac = new QuizCardPlayer();
     }
     
@@ -24,9 +26,9 @@ public class QuizCardPlayer extends QuizCardGui{
 	// Initialize variables
 	qTextArea = getQuestion();
 	aTextArea = getAnswer();
+	allCards = new ArrayList<QuizCard>();
 	// true until first flag call in initialize
 	isAnswerShown = false;
-	allCards = new ArrayList<QuizCard>();
 	// build GUI
 	initialize();
     }
@@ -38,6 +40,7 @@ public class QuizCardPlayer extends QuizCardGui{
 	// build and display GUI
 	//setup frame
 	getFrame().setTitle("QuizCard Player");
+	getFrame().setBounds(550, 50, 800, 1000);
 	
 	//  Create and add menu Item
 	loadMenuItem = new JMenuItem("Load");
@@ -59,11 +62,24 @@ public class QuizCardPlayer extends QuizCardGui{
 	
     }
     
+    private void setAndShowCard(){
+	if (allCards.size() > 0){
+	    currCard = allCards.get(0);
+	    allCards.remove(0);
+	    qTextArea.setText(currCard.getQuestion());
+	    aTextArea.setText(currCard.getAnswer());
+	}else{
+	    qTextArea.setText("All Questions finished");
+	    aTextArea.setText("");
+	}
+    }
+    
     private void checkNexButtontFlag(){
 	if (isAnswerShown){
 	    // answer is shown, so hide answer, change button text and fetch next question
 	    aTextArea.setVisible(false);
 	    isAnswerShown = false;
+	    setAndShowCard();
 	    getNextButton().setText("Show Answer");
 	}else{
 	    // answer not shown, show answer, change button text
@@ -81,7 +97,6 @@ public class QuizCardPlayer extends QuizCardGui{
 	    // set a flag for whether its a question or answer
 	    
 	    checkNexButtontFlag();
-	    
 	}
     }
     
@@ -92,6 +107,12 @@ public class QuizCardPlayer extends QuizCardGui{
 	    // bring up a file dialog box
 	    // let the user navigate to and choose a card set to open
 	    
+	    JFileChooser fileOpen = new JFileChooser();
+	    fileOpen.showOpenDialog(getFrame());
+	    loadFile (fileOpen.getSelectedFile());
+	    // set the question after loading a file
+	    isAnswerShown = true;
+	    checkNexButtontFlag();
 	}
     }
     
@@ -101,6 +122,20 @@ public class QuizCardPlayer extends QuizCardGui{
 	// called from the OpenMenuListener event handler, reads the file one line at a time
 	// and tells the makeCard() method to make a new card out of the line
 	// one line in the file holds both the question and answer, separated by a "|/|"
+	allCards = new ArrayList<QuizCard>();
+	
+	// setUp BufferReader with fileinputStream
+	try {
+	    BufferedReader reader = new BufferedReader(new FileReader(file));
+	    
+	    String line = null;
+	    while ((line = reader.readLine()) != null){
+		makeCard(line);
+	    }
+	    reader.close();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
     
     private void makeCard(String lineToParse){
@@ -108,5 +143,12 @@ public class QuizCardPlayer extends QuizCardGui{
 	// called by the loadFile method takes a line from the text file
 	// and parses into two pieces - question and answer - and creates a new QuizCard
 	// and adds it to the ArrayList called CardList
+	String[] args = lineToParse.split("\t\t\t/\t\t\t");
+	if (args.length > 1){
+	    // check that args are not null and there is a value for a question and answer
+	    if (args[0].length() > 0 && args[1].length() > 0){
+		allCards.add(new QuizCard(args[0], args[1]));
+	    }
+	}
     }
 }

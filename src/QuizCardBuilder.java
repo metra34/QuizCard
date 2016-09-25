@@ -105,7 +105,7 @@ public class QuizCardBuilder extends QuizCardGui{
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
 	    for (QuizCard card : allCards) {
-		writer.write(card.getQuestion() + "|/|");
+		writer.write(card.getQuestion() + "\t\t\t/\t\t\t");
 		writer.write(card.getAnswer() + "\n");
 	    }
 	    writer.close();
