@@ -92,7 +92,6 @@ public class QuizCardPlayer extends QuizCardGui{
     private class NextCardListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO
 	    // if this is a question, show the answer, otherwise show next question
 	    // set a flag for whether its a question or answer
 	    
@@ -103,7 +102,6 @@ public class QuizCardPlayer extends QuizCardGui{
     private class OpenMenuListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	    // TODO
 	    // bring up a file dialog box
 	    // let the user navigate to and choose a card set to open
 	    
@@ -117,7 +115,6 @@ public class QuizCardPlayer extends QuizCardGui{
     }
     
     private void loadFile(File file){
-	// TODO
 	// must build an arraylist of cards, by reading them from a text file
 	// called from the OpenMenuListener event handler, reads the file one line at a time
 	// and tells the makeCard() method to make a new card out of the line
@@ -139,7 +136,6 @@ public class QuizCardPlayer extends QuizCardGui{
     }
     
     private void makeCard(String lineToParse){
-	//TODO
 	// called by the loadFile method takes a line from the text file
 	// and parses into two pieces - question and answer - and creates a new QuizCard
 	// and adds it to the ArrayList called CardList
